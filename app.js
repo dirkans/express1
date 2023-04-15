@@ -4,9 +4,17 @@ const fs = require('fs');
 
 const PORT = 8080;
 const server = express();
+//server.use(express.json);
+server.use(express.urlencoded({extended:true}));
+const usuarios = [
+
+    {id:1,nombre:'Pablo',apellido:'Ambrosio',edad:31,correo:'dirkans@hotmail.com'}
+
+]
 
 
 server.listen(PORT,()=>{
+    
     console.log(`Running ok on port ${PORT}`)
 })
 
@@ -98,27 +106,20 @@ deleteProduct = async(id) => {
 }
 
 }
-
 const manager = new ProductManager('./prods.json');
 
 
 
 server.get('/products',async(req,res)=>{
-    
-    
-    
     const prods = await manager.getProducts();
     if(!req.query.limit){
         res.send(prods)
     } else {
         const prodsLimitado = prods.slice(0,(req.query.limit))
         res.send(prodsLimitado)
-
     }
-
 });
     
-
 
 server.get('/product/:pid',async(req,res)=>{
     const idNum = parseInt(req.params.pid) 
@@ -127,4 +128,19 @@ server.get('/product/:pid',async(req,res)=>{
 });
 
 
+
     
+server.get('/usuarios',(req,res)=>{
+    
+    res.send(usuarios)
+})
+
+
+server.get('/usuario/:id_usuario',(req,res)=>{
+    res.send(usuarios[0])
+})
+
+server.post('/usuario',(req,res)=>{
+    res.send('Endpoint alcanzado')
+    console.log(req.body)
+})
